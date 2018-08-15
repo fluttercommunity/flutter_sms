@@ -23,8 +23,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _sendSMS(String message, List<String> recipents) {
-    print("SMS: $message => ${recipents.toString()}");
+    String _log = "SMS: $message";
+    for (var person in recipents) _log += "\n=> $person";
+    setState(() => _message = "$_log");
   }
+
+  String _message = "";
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +37,36 @@ class _MyAppState extends State<MyApp> {
         appBar: new AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: new Center(
-          child: RaisedButton(
-            child: Text('Send SMS'),
-            onPressed: () {
-              _sendSMS("Test", ["5551231234", "5551581234", "5551301234"]);
-            },
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      _message ?? "No Message",
+                      maxLines: null,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text('Send SMS'),
+                    onPressed: () {
+                      _sendSMS(
+                          "Test", ["5551231234", "5551581234", "5551301234"]);
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
