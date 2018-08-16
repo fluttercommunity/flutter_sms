@@ -19,8 +19,8 @@ class FlutterSms {
     mapData["message"] = message;
     mapData["recipients"] = recipients;
     final String result = await _channel.invokeMethod('sendSMS', mapData);
-    String _log = "SMS Message: $message";
-    for (var person in recipients) _log += "\nSent: $person";
+    // String _log = "SMS Message: $message";
+    // for (var person in recipients) _log += "\nSent: $person";
     // final String result = _log;
     return result;
   }

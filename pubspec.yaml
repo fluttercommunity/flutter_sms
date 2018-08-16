@@ -1,8 +1,10 @@
 name: flutter_sms
 description: A Flutter plugin for Sending SMS on Android and iOS.
 version: 0.0.1
-author:
-homepage:
+author: Rody Davis <rody.davis.jr@gmail.com>
+homepage: https://github.com/AppleEducate/flutter_sms
+environment:
+    sdk: ">=1.19.0 <2.0.0"
 
 dependencies:
   flutter:
