@@ -16,12 +16,16 @@ public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControl
     _arguments = call.arguments as! [String : Any];
     switch call.method {
     case "sendSMS":
+      #if targetEnvironment(simulator)
+      result(FlutterError(code: "message_not_sent", message: "Cannot send message on this device!", details: "Cannot send SMS and MMS on a Simulator. Test on a real device."))
+      #else
       let controller = MFMessageComposeViewController()
       controller.body = _arguments["message"] as? String
       controller.recipients = _arguments["recipients"] as? [String]
       controller.messageComposeDelegate = self
       UIApplication.shared.keyWindow?.rootViewController?.present(controller, animated: true, completion: nil)
-      result(message)
+       result(message)
+      #endif
     default:
         result(FlutterMethodNotImplemented)
       break

@@ -1,8 +1,6 @@
 # flutter_sms
 
-<p align="center">
-  <img src="https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG" width="400">
-</p>
+![alt-text-1](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG)
 
 ## Description
 
