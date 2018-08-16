@@ -21,7 +21,9 @@ public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControl
       controller.recipients = _arguments["recipients"] as? [String]
       controller.messageComposeDelegate = self
       UIApplication.shared.keyWindow?.rootViewController?.present(controller, animated: true, completion: nil)
+      result(message)
     default:
+        result(FlutterMethodNotImplemented)
       break
     }
   }
