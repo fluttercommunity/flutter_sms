@@ -44,8 +44,11 @@ Create a function for sending messages.
 String _message = "";
 
 void _sendSMS(String message, List<String> recipents) async {
-    String _result =
-        await FlutterSms.sendSMS(message: message, recipients: recipents);
+ String _result = await FlutterSms
+        .sendSMS(message: message, recipients: recipents)
+        .catchError((onError) {
+      print(onError);
+    });
     setState(() => _message = _result);
 }
 ```
