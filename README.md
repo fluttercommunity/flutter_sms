@@ -41,22 +41,23 @@ import 'package:flutter_sms/flutter_sms.dart';
 Create a function for sending messages.
 
 ``` dart
-String _message = "";
-
 void _sendSMS(String message, List<String> recipents) async {
  String _result = await FlutterSms
         .sendSMS(message: message, recipients: recipents)
         .catchError((onError) {
       print(onError);
     });
-    setState(() => _message = _result);
+print(_result);
 }
 ```
 
 You can quickly send the message with this function.
 
 ``` dart
-_sendSMS("Here is a test Message", ["5555543454", "78467477788"])
+String message = "This is a test message!";
+List<String> recipents = ["1234567890", "5556787676"];
+
+_sendSMS(message, recipents);
 ```
 
 ## Screenshots
