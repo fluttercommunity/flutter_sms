@@ -1,6 +1,6 @@
 # flutter_sms
 
-![alt text](repo/blob/master/screenshots/ios_blank.PNG)
+![alt text](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG)
 
 ## Description
 
@@ -58,7 +58,7 @@ _sendSMS("Here is a test Message", ["5555543454", "78467477788"])
 
 ## Screenshots
 
-![alt text](repo/blob/master/screenshots/ios_sms.PNG)
-![alt text](repo/blob/master/screenshots/android_mms.png)
+![alt text](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_sms.PNG)
+![alt text](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/android_mms.png)
 
-You can find other [screenshots here](repo/blob/screenshots).
+You can find other [screenshots here](https://github.com/AppleEducate/flutter_sms/blob/screenshots).
