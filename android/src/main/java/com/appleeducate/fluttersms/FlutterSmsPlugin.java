@@ -63,7 +63,7 @@ public class FlutterSmsPlugin implements MethodCallHandler {
       } else {
         sendSMS(recipients, message);
       }
-      result.success("Android " + android.os.Build.VERSION.RELEASE);
+      result.success("Sent!");
     } else {
       result.notImplemented();
     }
