@@ -1,6 +1,6 @@
 # flutter_sms
 
-![alt text](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG)
+![main-image](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG){:class="img-responsive"}
 
 ## Description
 
@@ -58,7 +58,8 @@ _sendSMS("Here is a test Message", ["5555543454", "78467477788"])
 
 ## Screenshots
 
-![alt text](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_sms.PNG)
-![alt text](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/android_mms.png)
+Solarized dark             |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![alt-text-1](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_sms.PNG)  |  ![alt-text-2](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/android_mms.png)
 
 You can find other [screenshots here](https://github.com/AppleEducate/flutter_sms/blob/screenshots).
