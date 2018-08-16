@@ -1,6 +1,8 @@
 # flutter_sms
 
-<img src="https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG" width="400" height="790">
+<p align="center">
+  <img src="https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG" width="400">
+</p>
 
 ## Description
 
@@ -62,4 +64,4 @@ iOS SMS             |  Android MMS
 :-------------------------:|:-------------------------:
 ![alt-text-1](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_sms.PNG)  |  ![alt-text-2](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/android_mms.png)
 
-You can find other [screenshots here](https://github.com/AppleEducate/flutter_sms/blob/screenshots).
+You can find other [screenshots here](https://github.com/AppleEducate/flutter_sms/tree/master/screenshots).
