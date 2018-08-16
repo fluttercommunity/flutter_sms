@@ -13,6 +13,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   TextEditingController _controllerPeople, _controllerMessage;
+  String _message, body;
+  List<String> people = [];
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +54,6 @@ class _MyAppState extends State<MyApp> {
                 IconButton(
                   icon: Icon(Icons.close),
                   onPressed: () => setState(() => people.remove(name)),
- 
                 ),
                 Padding(
                   padding: const EdgeInsets.all(0.0),
@@ -67,19 +69,15 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  String _message, body;
-  List<String> people = [];
-
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('SMS/MMS Example'),
         ),
         body: ListView(
           children: <Widget>[
-            ListTile(title: Text('People')),
             people == null || people.isEmpty
                 ? Container(
                     height: 0.0,
@@ -101,6 +99,7 @@ class _MyAppState extends State<MyApp> {
               leading: Icon(Icons.people),
               title: TextField(
                 controller: _controllerPeople,
+                decoration: InputDecoration(labelText: "Add Phone Number"),
                 onChanged: (String value) => setState(() {}),
               ),
               trailing: IconButton(
@@ -114,10 +113,10 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             Divider(),
-            ListTile(title: Text('Message')),
             ListTile(
               leading: Icon(Icons.message),
               title: TextField(
+                decoration: InputDecoration(labelText: " Add Message"),
                 controller: _controllerMessage,
                 onChanged: (String value) => setState(() {}),
               ),
@@ -140,12 +139,15 @@ class _MyAppState extends State<MyApp> {
                   : Text(people.toString()),
               trailing: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: (body == null || body.isEmpty) &&
-                        (people == null || people.isEmpty)
-                    ? null
-                    : () {
-                        _sendSMS(body, people);
-                      },
+                onPressed: () {
+                  if ((people == null || people.isEmpty) ||
+                      (body == null || body.isEmpty)) {
+                    setState(() =>
+                        _message = "At Least 1 Person or Message Required");
+                  } else {
+                    _sendSMS(body, people);
+                  }
+                },
               ),
             ),
             Divider(),
