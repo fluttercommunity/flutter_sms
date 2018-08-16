@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 
 void main() => runApp(new MyApp());
