@@ -17,14 +17,28 @@ public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControl
     switch call.method {
     case "sendSMS":
       #if targetEnvironment(simulator)
-      result(FlutterError(code: "message_not_sent", message: "Cannot send message on this device!", details: "Cannot send SMS and MMS on a Simulator. Test on a real device."))
+        result(FlutterError(
+            code: "message_not_sent",
+            message: "Cannot send message on this device!",
+            details: "Cannot send SMS and MMS on a Simulator. Test on a real device."
+          )
+        )
       #else
-      let controller = MFMessageComposeViewController()
-      controller.body = _arguments["message"] as? String
-      controller.recipients = _arguments["recipients"] as? [String]
-      controller.messageComposeDelegate = self
-      UIApplication.shared.keyWindow?.rootViewController?.present(controller, animated: true, completion: nil)
-       result(message)
+        if (MFMessageComposeViewController.canSendText()) {
+          let controller = MFMessageComposeViewController()
+          controller.body = _arguments["message"] as? String
+          controller.recipients = _arguments["recipients"] as? [String]
+          controller.messageComposeDelegate = self
+          UIApplication.shared.keyWindow?.rootViewController?.present(controller, animated: true, completion: nil)
+          result(message)
+        } else {
+          result(FlutterError(
+              code: "device_not_capable",
+              message: "The current device is not capable of sending text messages.",
+              details: "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS."
+            )
+          )
+        }
       #endif
     default:
         result(FlutterMethodNotImplemented)
