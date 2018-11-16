@@ -3,11 +3,11 @@ import UIKit
 import MessageUI
 
 public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate {
-  var message = "Please Send Message"
-  var _arguments = [String: Any]()
+    var result: FlutterResult?
+    var _arguments = [String: Any]()
 
   public static func register(with registrar: FlutterPluginRegistrar) {
-  let channel = FlutterMethodChannel(name: "flutter_sms", binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(name: "flutter_sms", binaryMessenger: registrar.messenger())
     let instance = SwiftFlutterSmsPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
@@ -47,7 +47,14 @@ public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControl
   }
 
   public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+    let map: [MessageComposeResult: String] = [
+        MessageComposeResult.sent: "sent",
+        MessageComposeResult.cancelled: "cancelled",
+        MessageComposeResult.failed: "failed",
+    ]
+    if let callback = self.result {
+        callback(map[result])
+    }
     UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
-      message = "Sent!"
   }
 }
