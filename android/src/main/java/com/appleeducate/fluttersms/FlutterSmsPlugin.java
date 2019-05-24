@@ -1,116 +1,89 @@
 package com.appleeducate.fluttersms;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
-import android.app.Activity;
-import android.content.Intent;
-import android.telephony.SmsManager;
-
-import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-//import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.annotation.VisibleForTesting;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
-import java.util.ArrayList;
+import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 
 /** FlutterSmsPlugin */
-public class FlutterSmsPlugin implements MethodCallHandler {
+public class FlutterSmsPlugin implements MethodCallHandler,  ActivityResultListener {
+  private static final int REQUEST_CODE_SEND_SMS = 0315;
+
+
   Activity activity;
 
   /** Plugin registration. */
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), "flutter_sms");
-    channel.setMethodCallHandler(new FlutterSmsPlugin(registrar.activity()));
+    channel.setMethodCallHandler(new FlutterSmsPlugin(registrar));
   }
 
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("sendSMS")) {
-      String message = call.argument("message");
-      ArrayList<String> recipients = call.argument("recipients");
-      String smsPermission = "SEND_SMS";
-      if (!checkPermission(smsPermission)) {
-        requestPermission(smsPermission);
-        if (!checkPermission(smsPermission)) {
-          openSettings();
-        } else {
-          sendSMS(recipients, message);
-        }
-      } else {
-        sendSMS(recipients, message);
+      if (!canSendSMS()) {
+        result.error(
+            "device_not_capable",
+            "The current device is not capable of sending text messages.",
+            "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS.");
+        return;
       }
-      result.success("Sent!");
+
+      String message = call.argument("message");
+      String recipients = call.argument("recipients");
+      sendSMS(result, recipients, message);
+      //result.success("SMS Sent!");
+    } else if (call.method.equals("canSendSMS")) {
+      result.success(canSendSMS());
     } else {
       result.notImplemented();
     }
   }
 
-  private FlutterSmsPlugin(Activity activity) {
-    this.activity = activity;
+  private FlutterSmsPlugin(Registrar registrar) {
+    this.activity = registrar.activity();
+    registrar.addActivityResultListener(this);
   }
 
-  private void sendSMS(ArrayList<String> phones, String message) {
-    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-    sendIntent.putExtra("sms_body", message);
-    sendIntent.setData(Uri.parse("sms:" + phones));
-    activity.startActivity(sendIntent);
+  private boolean canSendSMS() {
+    if (!activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
+      return false;
+
+    Intent intent = new Intent(Intent.ACTION_SENDTO);
+    intent.setData(Uri.parse("smsto:"));
+    ActivityInfo activityInfo =
+        intent.resolveActivityInfo(activity.getPackageManager(), intent.getFlags());
+    if (activityInfo == null || !activityInfo.exported) return false;
+
+    return true;
   }
 
-  private boolean checkPermission(String permission) {
-    permission = getManifestPermission(permission);
-    Log.i("SimplePermission", "Checking permission : " + permission);
-    return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(activity, permission);
+  private Result result;
+
+  private void sendSMS(Result result, String phones, String message) {
+    this.result = result;
+    Intent intent = new Intent(Intent.ACTION_SENDTO);
+    intent.setData(Uri.parse("smsto:" + phones));
+    intent.putExtra("sms_body", message);
+    intent.putExtra(Intent.EXTRA_TEXT, message);
+    //     intent.putExtra(Intent.EXTRA_STREAM, attachment);
+    activity.startActivityForResult(intent, REQUEST_CODE_SEND_SMS);
   }
 
-  private void requestPermission(String permission) {
-    permission = getManifestPermission(permission);
-    Log.i("SimplePermission", "Requesting permission : " + permission);
-    String[] perm = { permission };
-    ActivityCompat.requestPermissions(activity, perm, 0);
-  }
-
-  private String getManifestPermission(String permission) {
-    String res;
-    switch (permission) {
-    case "SEND_SMS":
-      res = Manifest.permission.SEND_SMS;
-      break;
-    default:
-      res = "ERROR";
-      break;
+  @Override
+  public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+    if(requestCode == REQUEST_CODE_SEND_SMS && result!=null){
+      result.success("finished");
+      result = null;
+      return true;
     }
-    return res;
-  }
-
-  private void openSettings() {
-    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.parse("package:" + activity.getPackageName()));
-    intent.addCategory(Intent.CATEGORY_DEFAULT);
-    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    activity.startActivity(intent);
+    return false;
   }
 }
