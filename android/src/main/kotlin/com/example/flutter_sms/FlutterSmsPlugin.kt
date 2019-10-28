@@ -13,7 +13,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 
-class FlutterSmsPlugin(registrar: Registrar) : MethodCallHandler, ActivityResultListener {
+class FlutterSmsPlugin(registrar: Registrar) : MethodCallHandler {
   private val REQUEST_CODE_SEND_SMS = 205
 
   var activity: Activity? = null
@@ -29,7 +29,7 @@ class FlutterSmsPlugin(registrar: Registrar) : MethodCallHandler, ActivityResult
 
   init {
     this.activity = registrar.activity()
-    registrar.addActivityResultListener(this)
+//    registrar.addActivityResultListener(this)
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
@@ -73,12 +73,12 @@ class FlutterSmsPlugin(registrar: Registrar) : MethodCallHandler, ActivityResult
     activity?.startActivityForResult(intent, REQUEST_CODE_SEND_SMS)
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Boolean {
-    if (requestCode == REQUEST_CODE_SEND_SMS && this.result != null) {
-      this.result!!.success("finished")
-      this.result = null
-      return true
-    }
-    return false
-  }
+//  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Boolean {
+//    if (requestCode == REQUEST_CODE_SEND_SMS && this.result != null) {
+//      this.result!!.success("finished")
+//      this.result = null
+//      return true
+//    }
+//    return false
+//  }
 }
