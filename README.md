@@ -5,7 +5,7 @@
 
 # flutter_sms
 
-![alt-text-1](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_blank.PNG)
+![alt-text-1](https://github.com/fluttercommunity/flutter_sms/blob/master/screenshots/ios_blank.PNG)
 
 ## Description
 
@@ -56,6 +56,6 @@ _sendSMS(message, recipents);
 
 iOS SMS             |  Android MMS
 :-------------------------:|:-------------------------:
-![alt-text-1](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/ios_sms.PNG)  |  ![alt-text-2](https://github.com/AppleEducate/flutter_sms/blob/master/screenshots/android_mms.png)
+![alt-text-1](https://github.com/fluttercommunity/flutter_sms/blob/master/screenshots/ios_sms.PNG)  |  ![alt-text-2](https://github.com/fluttercommunity/flutter_sms/blob/master/screenshots/android_mms.png)
 
-You can find other [screenshots here](https://github.com/AppleEducate/flutter_sms/tree/master/screenshots).
+You can find other [screenshots here](https://github.com/fluttercommunity/flutter_sms/tree/master/screenshots).
