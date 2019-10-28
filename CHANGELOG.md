@@ -1,3 +1,7 @@
+## 1.1.0
+
+* Updating for latest ios/android flutter plugin template
+
 ## 1.0.1
 
 * Android result added
