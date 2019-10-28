@@ -13,9 +13,9 @@ public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControl
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    _arguments = call.arguments as! [String : Any];
     switch call.method {
     case "sendSMS":
+        _arguments = call.arguments as! [String : Any];
       #if targetEnvironment(simulator)
         result(FlutterError(
             code: "message_not_sent",
@@ -42,7 +42,7 @@ public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControl
       #endif
 
     case "canSendSMS":
-      #if targetEnvironment(simulator)
+     #if targetEnvironment(simulator)
         result(false)
       #else
         if (MFMessageComposeViewController.canSendText()) {
