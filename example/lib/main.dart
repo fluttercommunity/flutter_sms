@@ -202,31 +202,31 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                "Can send SMS",
-                style: Theme.of(context).textTheme.title,
-              ),
-            ),
-            Padding(
+             Divider(),
+              Padding(
                 padding: const EdgeInsets.all(8),
-                child: Text(_canSendSMSMessage,
-                    style: Theme.of(context).textTheme.body1)),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
-              child: RaisedButton(
-                color: Theme.of(context).accentColor,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text("RUN CHECK",
-                    style: Theme.of(context).accentTextTheme.button),
-                onPressed: () {
-                  _canSendSMS();
-                },
+                child: Text(
+                  "Can send SMS",
+                  style: Theme.of(context).textTheme.title,
+                ),
               ),
-            )
+              Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(_canSendSMSMessage,
+                      style: Theme.of(context).textTheme.body1)),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
+                child: RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Text("RUN CHECK",
+                      style: Theme.of(context).accentTextTheme.button),
+                  onPressed: () {
+                    _canSendSMS();
+                  },
+                ),
+              )
           ],
         ),
       ),
