@@ -11,9 +11,8 @@ import 'package:flutter/foundation.dart';
 
 /// main is entry point of Flutter application
 void main() {
-  // Desktop platforms aren't a valid platform.
-  _setTargetPlatformForDesktop();
-
+  WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb) _setTargetPlatformForDesktop();
   return runApp(MyApp());
 }
 
@@ -57,7 +56,7 @@ class _MyAppState extends State<MyApp> {
   void _sendSMS(String message, List<String> recipents) async {
     try {
       String _result =
-          await FlutterSms.sendSMS(message: message, recipients: recipents);
+          await sendSMS(message: message, recipients: recipents);
       setState(() => _message = _result);
     } catch (error) {
       setState(() => _message = error.toString());
@@ -65,7 +64,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _canSendSMS() async {
-    bool _result = await FlutterSms.canSendSMS();
+    bool _result = await canSendSMS();
     setState(() => _canSendSMSMessage =
         _result ? 'This unit can send SMS' : 'This unit cannot send SMS');
   }
@@ -202,31 +201,31 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-             Divider(),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  "Can send SMS",
-                  style: Theme.of(context).textTheme.title,
-                ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text(
+                "Can send SMS",
+                style: Theme.of(context).textTheme.title,
               ),
-              Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(_canSendSMSMessage,
-                      style: Theme.of(context).textTheme.body1)),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
-                child: RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Text("RUN CHECK",
-                      style: Theme.of(context).accentTextTheme.button),
-                  onPressed: () {
-                    _canSendSMS();
-                  },
-                ),
-              )
+            ),
+            Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(_canSendSMSMessage,
+                    style: Theme.of(context).textTheme.body1)),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
+              child: RaisedButton(
+                color: Theme.of(context).accentColor,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text("RUN CHECK",
+                    style: Theme.of(context).accentTextTheme.button),
+                onPressed: () {
+                  _canSendSMS();
+                },
+              ),
+            )
           ],
         ),
       ),

@@ -1,3 +1,8 @@
+## 2.0.0
+
+* Adding Online Demo
+* Adding Support for Web
+
 ## 1.1.0
 
 * Updating for latest ios/android flutter plugin template
