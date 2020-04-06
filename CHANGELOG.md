@@ -1,3 +1,8 @@
+## 2.1.0
+
+* Fixing Bugs with iOS
+* Adding URL fallback
+
 ## 2.0.0
 
 * Adding Online Demo

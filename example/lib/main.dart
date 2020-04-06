@@ -33,7 +33,7 @@ void _setTargetPlatformForDesktop() {
 
 class MyApp extends StatefulWidget {
   @override
-  _MyAppState createState() => new _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -53,10 +53,10 @@ class _MyAppState extends State<MyApp> {
     _controllerMessage = TextEditingController();
   }
 
-  void _sendSMS(String message, List<String> recipents) async {
+  void _sendSMS(List<String> recipents) async {
     try {
-      String _result =
-          await sendSMS(message: message, recipients: recipents);
+      String _result = await sendSMS(
+          message: _controllerMessage.text, recipients: recipents);
       setState(() => _message = _result);
     } catch (error) {
       setState(() => _message = error.toString());
@@ -107,9 +107,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
           title: const Text('SMS/MMS Example'),
         ),
         body: ListView(
@@ -157,80 +158,60 @@ class _MyAppState extends State<MyApp> {
                 controller: _controllerMessage,
                 onChanged: (String value) => setState(() {}),
               ),
-              trailing: IconButton(
-                icon: Icon(Icons.save),
-                onPressed: _controllerMessage.text.isEmpty
-                    ? null
-                    : () => setState(() {
-                          body = _controllerMessage.text.toString();
-                          _controllerMessage.clear();
-                        }),
-              ),
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.text_fields),
-              title: Text(body ?? "No Message Set"),
-              subtitle: people == null || people.isEmpty
-                  ? null
-                  : Text(people.toString()),
+              title: Text("Can send SMS"),
+              subtitle: Text(_canSendSMSMessage),
               trailing: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () {
-                  if ((people == null || people.isEmpty) &&
-                      (body == null || body.isEmpty)) {
-                    setState(() =>
-                        _message = "At Least 1 Person or Message Required");
-                  } else {
-                    _sendSMS(body, people);
-                  }
-                },
-              ),
-            ),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text(
-                      _message ?? "No Data",
-                      maxLines: null,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                "Can send SMS",
-                style: Theme.of(context).textTheme.title,
-              ),
-            ),
-            Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(_canSendSMSMessage,
-                    style: Theme.of(context).textTheme.body1)),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
-              child: RaisedButton(
-                color: Theme.of(context).accentColor,
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text("RUN CHECK",
-                    style: Theme.of(context).accentTextTheme.button),
+                icon: Icon(Icons.check),
                 onPressed: () {
                   _canSendSMS();
                 },
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton(
+                color: Theme.of(context).accentColor,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text("SEND",
+                    style: Theme.of(context).accentTextTheme.button),
+                onPressed: () {
+                  _send();
+                },
+              ),
+            ),
+            Visibility(
+              visible: _message != null,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text(
+                        _message ?? "No Data",
+                        maxLines: null,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _send() {
+    if (people == null || people.isEmpty) {
+      setState(() => _message = "At Least 1 Person or Message Required");
+    } else {
+      _sendSMS(people);
+    }
   }
 }
