@@ -10,8 +10,8 @@ const RESOURCES = {
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
 "assets/fonts/MaterialIcons-Regular.ttf": "56d3ffdef7a25659eab6a68a3fbfaf16",
 "assets/FontManifest.json": "01700ba55b08a6141f33e168c4a6c22f",
-"main.dart.js": "1b3645a995654ce53861fc6e62f93ae1",
-"index.html": "e36211d86e9c70409c58295974f749a1"
+"main.dart.js": "ab1b7da79cf610e3c7b7cd6be2a0f768",
+"index.html": "926cd8008bef60a4e735ba8d18fbac9c"
 };
 
 self.addEventListener('activate', function (event) {
