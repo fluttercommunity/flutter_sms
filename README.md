@@ -37,8 +37,7 @@ Create a function for sending messages.
 
 ``` dart
 void _sendSMS(String message, List<String> recipents) async {
- String _result = await FlutterSms
-        .sendSMS(message: message, recipients: recipents)
+ String _result = await sendSMS(message: message, recipients: recipents)
         .catchError((onError) {
       print(onError);
     });
