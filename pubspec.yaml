@@ -16,6 +16,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   plugin_platform_interface: ^1.0.1
+  html: ^0.14.0+3
 
 dev_dependencies:
   flutter_test:
