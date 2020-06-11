@@ -16,6 +16,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   plugin_platform_interface: ^1.0.1
+  flutter_user_agent: ^1.2.2
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +32,6 @@ flutter:
         pluginClass: FlutterSmsPlugin
       # macos:
       #   pluginClass: FlutterSmsPlugin
-      web:
-        pluginClass: FlutterSmsPlugin
-        fileName: flutter_sms_web.dart
+      # web:
+      #   pluginClass: FlutterSmsPlugin
+      #   fileName: flutter_sms_web.dart
