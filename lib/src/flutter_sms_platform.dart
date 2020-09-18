@@ -55,7 +55,7 @@ class FlutterSmsPlatform extends PlatformInterface {
     if (numbers == null || numbers.length == 1) {
       return launchSms(numbers?.first, body);
     }
-    String _phones = numbers.join(",");
+    String _phones = numbers.join(";");
     if (body != null) {
       final _body = Uri.encodeComponent(body);
       return launch('sms:/open?addresses=$_phones${seperator}body=$_body');
