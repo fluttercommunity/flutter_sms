@@ -41,7 +41,7 @@ class FlutterSmsPlatform extends PlatformInterface {
       mapData["recipients"] = recipients;
       return _channel.invokeMethod<String>('sendSMS', mapData);
     } else {
-      String _phones = recipients.join(",");
+      String _phones = recipients.join(";");
       mapData["recipients"] = _phones;
       return _channel.invokeMethod<String>('sendSMS', mapData);
     }
