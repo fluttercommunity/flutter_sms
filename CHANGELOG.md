@@ -1,3 +1,7 @@
+## 2.1.1
+
+* Fixing Issue with Web
+
 ## 2.1.0
 
 * Fixing Bugs with iOS
