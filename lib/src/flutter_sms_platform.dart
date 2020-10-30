@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_user_agent/flutter_user_agent.dart';
@@ -41,7 +42,7 @@ class FlutterSmsPlatform extends PlatformInterface {
       mapData["recipients"] = recipients;
       return _channel.invokeMethod<String>('sendSMS', mapData);
     } else {
-      String _phones = recipients.join(",");
+      String _phones = recipients.join(";");
       mapData["recipients"] = _phones;
       return _channel.invokeMethod<String>('sendSMS', mapData);
     }
@@ -55,7 +56,7 @@ class FlutterSmsPlatform extends PlatformInterface {
     if (numbers == null || numbers.length == 1) {
       return launchSms(numbers?.first, body);
     }
-    String _phones = numbers.join(",");
+    String _phones = numbers.join(";");
     if (body != null) {
       final _body = Uri.encodeComponent(body);
       return launch('sms:/open?addresses=$_phones${seperator}body=$_body');

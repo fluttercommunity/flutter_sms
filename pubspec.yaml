@@ -32,6 +32,6 @@ flutter:
         pluginClass: FlutterSmsPlugin
       # macos:
       #   pluginClass: FlutterSmsPlugin
-      web:
-        pluginClass: FlutterSmsPlugin
-        fileName: flutter_sms_web.dart
+     # web:
+       # pluginClass: FlutterSmsPlugin
+       # fileName: flutter_sms_web.dart
