@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_user_agent/flutter_user_agent.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_user_agent/flutter_user_agent.dart';
 
 const MethodChannel _channel = MethodChannel('flutter_sms');
 
@@ -87,7 +88,7 @@ class FlutterSmsPlatform extends PlatformInterface {
         'iPod',
         'Mac OS X',
       ];
-      final _agent = FlutterUserAgent.webViewUserAgent;
+      final String _agent = FlutterUserAgent.webViewUserAgent;
       for (final device in _devices) {
         if (_agent.contains(device)) {
           return true;
