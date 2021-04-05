@@ -173,9 +173,13 @@ class _MyAppState extends State<MyApp> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                color: Theme.of(context).accentColor,
-                padding: EdgeInsets.symmetric(vertical: 16),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith(
+                      (states) => Theme.of(context).accentColor),
+                  padding: MaterialStateProperty.resolveWith(
+                      (states) => EdgeInsets.symmetric(vertical: 16)),
+                ),
                 child: Text("SEND",
                     style: Theme.of(context).accentTextTheme.button),
                 onPressed: () {
