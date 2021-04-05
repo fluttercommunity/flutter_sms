@@ -1,3 +1,14 @@
+## 2.3.1
+
+* Full null safety
+* Fixing support for web
+* Removing macos folder
+* Fixing example
+
+## 2.3.0
+
+* Null Safety (1 dependency needs to be upgraded for full null safety: flutter_user_agent)
+
 ## 2.2.0
 
 * Upgrading dependencies

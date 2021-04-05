@@ -13,8 +13,8 @@ class FlutterSmsPlugin extends FlutterSmsPlatform {
 
   @override
   Future<String> sendSMS({
-    @required String message,
-    @required List<String> recipients,
+    required String message,
+    required List<String> recipients,
   }) async {
     bool _messageSent =
         await FlutterSmsPlatform.instance.launchSmsMulti(recipients, message);

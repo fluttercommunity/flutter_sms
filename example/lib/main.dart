@@ -11,8 +11,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  TextEditingController _controllerPeople, _controllerMessage;
-  String _message, body;
+  late TextEditingController _controllerPeople, _controllerMessage;
+  String? _message, body;
   String _canSendSMSMessage = 'Check is not run.';
   List<String> people = [];
 
@@ -50,10 +50,10 @@ class _MyAppState extends State<MyApp> {
       child: Container(
           decoration: BoxDecoration(
               border: Border(
-            bottom: BorderSide(color: Colors.grey[300]),
-            top: BorderSide(color: Colors.grey[300]),
-            left: BorderSide(color: Colors.grey[300]),
-            right: BorderSide(color: Colors.grey[300]),
+            bottom: BorderSide(color: Colors.grey.shade300),
+            top: BorderSide(color: Colors.grey.shade300),
+            left: BorderSide(color: Colors.grey.shade300),
+            right: BorderSide(color: Colors.grey.shade300),
           )),
           child: Padding(
             padding: const EdgeInsets.all(4),
@@ -186,7 +186,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _send() {
-    if (people == null || people.isEmpty) {
+    if (people.isEmpty) {
       setState(() => _message = 'At Least 1 Person or Message Required');
     } else {
       _sendSMS(people);
