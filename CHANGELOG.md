@@ -1,3 +1,8 @@
+## 2.2.0
+
+* Upgrading dependencies
+* Updating example (lint issues)
+
 ## 2.1.1
 
 * Fixing Issue with Web
