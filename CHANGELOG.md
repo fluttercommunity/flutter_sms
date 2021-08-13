@@ -1,3 +1,7 @@
+# 2.3.2
+
+* Update Android plugin to use V2 embedding.
+
 ## 2.3.1
 
 * Full null safety
