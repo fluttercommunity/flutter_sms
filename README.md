@@ -56,6 +56,19 @@ List<String> recipents = ["1234567890", "5556787676"];
 _sendSMS(message, recipents);
 ```
 
+On Android, you can skip the additional dialog with the sendDirect parameter.
+
+``` dart
+String message = "This is a test message!";
+List<String> recipents = ["1234567890", "5556787676"];
+
+ String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
+        .catchError((onError) {
+      print(onError);
+    });
+print(_result);
+```
+
 ## Screenshots
 
 iOS SMS             |  Android MMS
