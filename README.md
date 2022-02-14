@@ -69,6 +69,16 @@ List<String> recipents = ["1234567890", "5556787676"];
 print(_result);
 ```
 
+NOTE: This also requires the SEND_SMS permission to be added to the AndroidManifest.xml
+
+```
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    
+    <application
+      ...
+```
+
+
 ## Screenshots
 
 iOS SMS             |  Android MMS
