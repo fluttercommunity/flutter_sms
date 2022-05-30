@@ -150,7 +150,8 @@ class _MyAppState extends State<MyApp> {
             ),
             SwitchListTile(
                 title: const Text('Send Direct'),
-                subtitle: const Text('Should we skip the additional dialog?'),
+                subtitle: const Text(
+                    'Should we skip the additional dialog? (Android only)'),
                 value: sendDirect,
                 onChanged: (bool newValue) {
                   setState(() {

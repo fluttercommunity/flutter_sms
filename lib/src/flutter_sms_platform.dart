@@ -37,7 +37,7 @@ class FlutterSmsPlatform extends PlatformInterface {
   Future<String> sendSMS({
     required String message,
     required List<String> recipients,
-    required bool sendDirect,
+    bool sendDirect = false,
   }) {
     final mapData = <dynamic, dynamic>{};
     mapData['message'] = message;
