@@ -1,16 +1,18 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 import 'src/flutter_sms_platform.dart';
 
 /// Open SMS Dialog on iOS/Android/Web
 Future<String> sendSMS({
   required String message,
   required List<String> recipients,
+  bool sendDirect = false,
 }) =>
-    FlutterSmsPlatform.instance
-        .sendSMS(message: message, recipients: recipients);
+    FlutterSmsPlatform.instance.sendSMS(
+      message: message,
+      recipients: recipients,
+      sendDirect: sendDirect,
+    );
 
 /// Launch SMS Url Scheme on all platforms
 Future<bool> launchSms({

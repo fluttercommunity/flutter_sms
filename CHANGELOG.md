@@ -1,3 +1,7 @@
+# 2.3.3
+
+* Adding ability to send SMS directly on Android (#57).
+
 # 2.3.2
 
 * Update Android plugin to use V2 embedding.

@@ -56,6 +56,36 @@ List<String> recipents = ["1234567890", "5556787676"];
 _sendSMS(message, recipents);
 ```
 
+
+## Sending Direct
+
+**WARNING, there is a narrow category of apps that can get into the play store
+using this feature. Using it is only advisable if you fit into this category or
+you intent to distribute through a third party platform**
+
+On Android, you can skip the additional dialog with the sendDirect parameter.
+
+``` dart
+String message = "This is a test message!";
+List<String> recipents = ["1234567890", "5556787676"];
+
+ String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
+        .catchError((onError) {
+      print(onError);
+    });
+print(_result);
+```
+
+NOTE: This also requires the SEND_SMS permission to be added to the AndroidManifest.xml
+
+```
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    
+    <application
+      ...
+```
+
+
 ## Screenshots
 
 iOS SMS             |  Android MMS

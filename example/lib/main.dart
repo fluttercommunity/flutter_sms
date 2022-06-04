@@ -15,6 +15,7 @@ class _MyAppState extends State<MyApp> {
   String? _message, body;
   String _canSendSMSMessage = 'Check is not run.';
   List<String> people = [];
+  bool sendDirect = false;
 
   @override
   void initState() {
@@ -30,7 +31,10 @@ class _MyAppState extends State<MyApp> {
   Future<void> _sendSMS(List<String> recipients) async {
     try {
       String _result = await sendSMS(
-          message: _controllerMessage.text, recipients: recipients);
+        message: _controllerMessage.text,
+        recipients: recipients,
+        sendDirect: sendDirect,
+      );
       setState(() => _message = _result);
     } catch (error) {
       setState(() => _message = error.toString());
@@ -89,7 +93,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: ListView(
           children: <Widget>[
-            if (people == null || people.isEmpty)
+            if (people.isEmpty)
               const SizedBox(height: 0)
             else
               SizedBox(
@@ -144,12 +148,22 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
+            SwitchListTile(
+                title: const Text('Send Direct'),
+                subtitle: const Text(
+                    'Should we skip the additional dialog? (Android only)'),
+                value: sendDirect,
+                onChanged: (bool newValue) {
+                  setState(() {
+                    sendDirect = newValue;
+                  });
+                }),
             Padding(
               padding: const EdgeInsets.all(8),
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => Theme.of(context).accentColor),
+                      (states) => Theme.of(context).colorScheme.secondary),
                   padding: MaterialStateProperty.resolveWith(
                       (states) => const EdgeInsets.symmetric(vertical: 16)),
                 ),
@@ -158,7 +172,7 @@ class _MyAppState extends State<MyApp> {
                 },
                 child: Text(
                   'SEND',
-                  style: Theme.of(context).accentTextTheme.button,
+                  style: Theme.of(context).textTheme.displayMedium,
                 ),
               ),
             ),
