@@ -7,7 +7,7 @@ import 'src/flutter_sms_platform.dart';
 
 class FlutterSmsPlugin extends FlutterSmsPlatform {
   static void registerWith(Registrar registrar) {
-    WidgetsFlutterBinding.ensureInitialized();
+    // WidgetsFlutterBinding.ensureInitialized();
     FlutterSmsPlatform.instance = FlutterSmsPlugin();
   }
 
