@@ -77,12 +77,22 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
             result.error(
                     "device_not_capable",
                     "The current device is not capable of sending text messages.",
-                    "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS.")
+                    "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS.",
+            )
             return
           }
           val message = call.argument<String?>("message") ?: ""
           val recipients = call.argument<String?>("recipients") ?: ""
           val sendDirect = call.argument<Boolean?>("sendDirect") ?: false
+
+          if (!sendDirect && !canSendSMSViaApp()) {
+            result.error(
+              "app_to_send_sms_not_available",
+              "The current device has not an app to send sms.",
+              "To send a non direct sms, an sms application is required",
+            )
+            return
+          }
           sendSMS(result, recipients, message!!, sendDirect)
         }
         "canSendSMS" -> result.success(canSendSMS())
@@ -91,13 +101,15 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   @TargetApi(Build.VERSION_CODES.ECLAIR)
-  private fun canSendSMS(): Boolean {
-    if (!activity!!.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
-      return false
+  private fun canSendSMS(): Boolean =
+    activity!!.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
+
+  @TargetApi(Build.VERSION_CODES.ECLAIR)
+  private fun canSendSMSViaApp(): Boolean {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("smsto:")
     val activityInfo = intent.resolveActivityInfo(activity!!.packageManager, intent.flags.toInt())
-    return !(activityInfo == null || !activityInfo.exported)
+    return canSendSMS() && !(activityInfo == null || !activityInfo.exported)
   }
 
   private fun sendSMS(result: Result, phones: String, message: String, sendDirect: Boolean) {
