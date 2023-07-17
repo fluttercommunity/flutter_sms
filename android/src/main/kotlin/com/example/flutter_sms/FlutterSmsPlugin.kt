@@ -18,16 +18,18 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 
-class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
+class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.ActivityResultListener {
   private lateinit var mChannel: MethodChannel
   private var activity: Activity? = null
-  private val REQUEST_CODE_SEND_SMS = 205
+  private var mResult: Result? = null
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
+    binding.addActivityResultListener(this)
   }
 
   override fun onDetachedFromActivity() {
@@ -62,6 +64,8 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   // V1 embedding entry point. This is deprecated and will be removed in a future Flutter
   // release but we leave it here in case someone's app does not utilize the V2 embedding yet.
   companion object {
+    private const val REQUEST_CODE_SEND_SMS = 205
+
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val inst = FlutterSmsPlugin()
@@ -71,6 +75,7 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
+    mResult = result
     when (call.method) {
         "sendSMS" -> {
           if (!canSendSMS()) {
@@ -102,17 +107,21 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
   private fun sendSMS(result: Result, phones: String, message: String, sendDirect: Boolean) {
     if (sendDirect) {
-      sendSMSDirect(result, phones, message);
+      sendSMSDirect(result, phones, message)
     }
     else {
-      sendSMSDialog(result, phones, message);
+      sendSMSDialog(phones, message)
     }
   }
 
   private fun sendSMSDirect(result: Result, phones: String, message: String) {
     // SmsManager is android.telephony
     val sentIntent = PendingIntent.getBroadcast(activity, 0, Intent("SMS_SENT_ACTION"), PendingIntent.FLAG_IMMUTABLE)
-    val mSmsManager = SmsManager.getDefault()
+    val mSmsManager : SmsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      activity!!.getSystemService(SmsManager::class.java)
+    } else {
+      SmsManager.getDefault()
+    }
     val numbers = phones.split(";")
 
     for (num in numbers) {
@@ -128,12 +137,18 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     result.success("SMS Sent!")
   }
 
-  private fun sendSMSDialog(result: Result, phones: String, message: String) {
+  private fun sendSMSDialog(phones: String, message: String) {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("smsto:$phones")
     intent.putExtra("sms_body", message)
     intent.putExtra(Intent.EXTRA_TEXT, message)
     activity?.startActivityForResult(intent, REQUEST_CODE_SEND_SMS)
-    result.success("SMS Sent!")
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+    if (requestCode == REQUEST_CODE_SEND_SMS) {
+      mResult?.success("SMS Sent!")
+    }
+    return false
   }
 }
