@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'src/flutter_sms_platform.dart';
 
+enum SendSMSResult { sent, failed, cancelled, unknownError }
+
 /// Open SMS Dialog on iOS/Android/Web
-Future<String> sendSMS({
+Future<SendSMSResult> sendSMS({
   required String message,
   required List<String> recipients,
   bool sendDirect = false,

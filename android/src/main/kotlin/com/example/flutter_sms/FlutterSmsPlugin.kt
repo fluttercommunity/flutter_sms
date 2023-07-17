@@ -125,7 +125,7 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       }
     }
 
-    result.success("SMS Sent!")
+    result.success("sent")
   }
 
   private fun sendSMSDialog(result: Result, phones: String, message: String) {
@@ -134,6 +134,6 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     intent.putExtra("sms_body", message)
     intent.putExtra(Intent.EXTRA_TEXT, message)
     activity?.startActivityForResult(intent, REQUEST_CODE_SEND_SMS)
-    result.success("SMS Sent!")
+    result.success("sent")
   }
 }

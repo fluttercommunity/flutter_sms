@@ -30,12 +30,27 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _sendSMS(List<String> recipients) async {
     try {
-      String _result = await sendSMS(
+      SendSMSResult _result = await sendSMS(
         message: _controllerMessage.text,
         recipients: recipients,
         sendDirect: sendDirect,
       );
-      setState(() => _message = _result);
+      setState(() {
+        switch (_result) {
+          case SendSMSResult.sent:
+            _message = 'SMS Sent!';
+            break;
+          case SendSMSResult.failed:
+            _message = 'Failed';
+            break;
+          case SendSMSResult.cancelled:
+            _message = 'Cancelled';
+            break;
+          case SendSMSResult.unknownError:
+            _message = 'Not sent';
+            break;
+        }
+      });
     } catch (error) {
       setState(() => _message = error.toString());
     }
