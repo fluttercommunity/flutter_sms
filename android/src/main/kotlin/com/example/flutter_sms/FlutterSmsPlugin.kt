@@ -70,25 +70,26 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     }
   }
 
-  override fun onMethodCall(call: MethodCall, result: Result) {
-    when (call.method) {
-        "sendSMS" -> {
-          if (!canSendSMS()) {
-            result.error(
-                    "device_not_capable",
-                    "The current device is not capable of sending text messages.",
-                    "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS.")
-            return
-          }
-          val message = call.argument<String?>("message") ?: ""
-          val recipients = call.argument<String?>("recipients") ?: ""
-          val sendDirect = call.argument<Boolean?>("sendDirect") ?: false
-          sendSMS(result, recipients, message!!, sendDirect)
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        when (call.method) {
+            "sendSMS" -> {
+                val message = call.argument<String?>("message") ?: ""
+                val recipients = call.argument<String?>("recipients") ?: ""
+                val sendType = call.argument<String?>("sendType") ?: "direct"
+                if (sendType != "background" && !canSendSMS()) {
+                    result.error(
+                            "device_not_capable",
+                            "The current device is not capable of sending text messages.",
+                            "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS.")
+                    return
+                }
+                sendSMS(result, recipients, message!!, sendType)
+            }
+
+            "canSendSMS" -> result.success(canSendSMS())
+            else -> result.notImplemented()
         }
-        "canSendSMS" -> result.success(canSendSMS())
-        else -> result.notImplemented()
     }
-  }
 
   @TargetApi(Build.VERSION_CODES.ECLAIR)
   private fun canSendSMS(): Boolean {
@@ -100,33 +101,50 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     return !(activityInfo == null || !activityInfo.exported)
   }
 
-  private fun sendSMS(result: Result, phones: String, message: String, sendDirect: Boolean) {
-    if (sendDirect) {
-      sendSMSDirect(result, phones, message);
-    }
-    else {
-      sendSMSDialog(result, phones, message);
-    }
-  }
 
-  private fun sendSMSDirect(result: Result, phones: String, message: String) {
-    // SmsManager is android.telephony
-    val sentIntent = PendingIntent.getBroadcast(activity, 0, Intent("SMS_SENT_ACTION"), PendingIntent.FLAG_IMMUTABLE)
-    val mSmsManager = SmsManager.getDefault()
-    val numbers = phones.split(";")
-
-    for (num in numbers) {
-      Log.d("Flutter SMS", "msg.length() : " + message.toByteArray().size)
-      if (message.toByteArray().size > 80) {
-        val partMessage = mSmsManager.divideMessage(message)
-        mSmsManager.sendMultipartTextMessage(num, null, partMessage, null, null)
-      } else {
-        mSmsManager.sendTextMessage(num, null, message, sentIntent, null)
-      }
+    private fun sendSMS(result: Result, phones: String, message: String, sendType: String) {
+        when (sendType) {
+            "direct" -> sendSMSDirect(result, phones, message)
+            "dialog" -> sendSMSDialog(result, phones, message)
+            "background" -> sendSMSBackground(result, phones, message)
+        }
     }
 
-    result.success("SMS Sent!")
-  }
+    private fun sendSMSBackground(result: Result, phones: String, message: String) {
+        val mSmsManager = SmsManager.getDefault()
+        val numbers = phones.split(";")
+
+        for (num in numbers) {
+            Log.d("Flutter SMS", "msg.length() : " + message.toByteArray().size)
+            if (message.toByteArray().size > 80) {
+                val partMessage = mSmsManager.divideMessage(message)
+                mSmsManager.sendMultipartTextMessage(num, null, partMessage, null, null)
+            } else {
+                mSmsManager.sendTextMessage(num, null, message, null, null)
+            }
+        }
+
+        result.success("SMS Sent!")
+    }
+
+    private fun sendSMSDirect(result: Result, phones: String, message: String) {
+        // SmsManager is android.telephony
+        val sentIntent = PendingIntent.getBroadcast(activity, 0, Intent("SMS_SENT_ACTION"), PendingIntent.FLAG_IMMUTABLE)
+        val mSmsManager = SmsManager.getDefault()
+        val numbers = phones.split(";")
+
+        for (num in numbers) {
+            Log.d("Flutter SMS", "msg.length() : " + message.toByteArray().size)
+            if (message.toByteArray().size > 80) {
+                val partMessage = mSmsManager.divideMessage(message)
+                mSmsManager.sendMultipartTextMessage(num, null, partMessage, null, null)
+            } else {
+                mSmsManager.sendTextMessage(num, null, message, sentIntent, null)
+            }
+        }
+
+        result.success("SMS Sent!")
+    }
 
   private fun sendSMSDialog(result: Result, phones: String, message: String) {
     val intent = Intent(Intent.ACTION_SENDTO)
