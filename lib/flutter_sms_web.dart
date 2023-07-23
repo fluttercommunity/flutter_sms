@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'src/flutter_sms_platform.dart';
@@ -16,6 +15,7 @@ class FlutterSmsPlugin extends FlutterSmsPlatform {
     required String message,
     required List<String> recipients,
     bool sendDirect = false,
+    String? sendType,
   }) async {
     bool _messageSent =
         await FlutterSmsPlatform.instance.launchSmsMulti(recipients, message);

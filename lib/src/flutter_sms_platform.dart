@@ -37,7 +37,7 @@ class FlutterSmsPlatform extends PlatformInterface {
   Future<String> sendSMS({
     required String message,
     required List<String> recipients,
-    bool sendDirect = false,
+    String sendType = 'dialog',
   }) {
     final mapData = <dynamic, dynamic>{};
     mapData['message'] = message;
@@ -49,7 +49,7 @@ class FlutterSmsPlatform extends PlatformInterface {
     } else {
       String _phones = recipients.join(';');
       mapData['recipients'] = _phones;
-      mapData['sendDirect'] = sendDirect;
+      mapData['sendType'] = sendType;
       return _channel
           .invokeMethod<String>('sendSMS', mapData)
           .then((value) => value ?? 'Error sending sms');
