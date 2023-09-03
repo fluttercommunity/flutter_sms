@@ -27,6 +27,23 @@ You can send multiple ways:
 This will populate the correct fields.
 
 
+## Setup
+
+### Android
+
+For Android API level > 30 you will need to add the following query to your AndroidManifest.xml
+
+```
+<queries>
+    <intent>
+        <action android:name="android.intent.action.SENDTO" />
+        <data android:scheme="smsto" />
+    </intent>
+</queries>
+```
+
+Without this, some Android devices may incorrectly return false for `canSend()`.
+
 ## Example
 
 Make sure to Install and Import the Package.
