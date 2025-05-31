@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface FlutterSmsPlugin : NSObject<FlutterPlugin>
+@interface FlutterSmsPlugin : NSObject <FlutterPlugin>
 @end
