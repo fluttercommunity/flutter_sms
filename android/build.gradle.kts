@@ -7,7 +7,6 @@ group = "com.example.flutter_sms"
 version = "1.0-SNAPSHOT"
 
 android {
-    namespace = "com.example.flutter_sms"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
     defaultConfig {

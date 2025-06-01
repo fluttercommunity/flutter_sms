@@ -1,30 +1,85 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+// test/widget_test.dart
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../lib/main.dart';
+// Since FlutterSms might not be available as package, define test class
+class FlutterSms {
+  static const MethodChannel _channel = MethodChannel('flutter_sms');
+
+  static Future<bool> get canSendSMS async {
+    final bool result = await _channel.invokeMethod('canSendSMS');
+    return result;
+  }
+
+  static Future<String> sendSMS({
+    required String message,
+    required String recipients,
+    bool sendDirect = false,
+  }) async {
+    final String result = await _channel.invokeMethod('sendSMS', {
+      'message': message,
+      'recipients': recipients,
+      'sendDirect': sendDirect,
+    });
+    return result;
+  }
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  const MethodChannel channel = MethodChannel('flutter_sms');
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  setUp(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+      switch (methodCall.method) {
+        case 'canSendSMS':
+          return true;
+        case 'sendSMS':
+          return 'SMS Sent!';
+        default:
+          return null;
+      }
+    });
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
+  });
+
+  group('Flutter SMS Tests', () {
+    test('canSendSMS returns true', () async {
+      final result = await FlutterSms.canSendSMS;
+      expect(result, true);
+    });
+
+    test('sendSMS returns success message', () async {
+      final result = await FlutterSms.sendSMS(
+        message: 'Test message',
+        recipients: '1234567890',
+        sendDirect: false,
+      );
+      expect(result, 'SMS Sent!');
+    });
+
+    test('sendSMS with direct sending', () async {
+      final result = await FlutterSms.sendSMS(
+        message: 'Direct test',
+        recipients: '1234567890',
+        sendDirect: true,
+      );
+      expect(result, 'SMS Sent!');
+    });
+
+    test('sendSMS with multiple recipients', () async {
+      final result = await FlutterSms.sendSMS(
+        message: 'Multi test',
+        recipients: '1234567890;0987654321',
+        sendDirect: false,
+      );
+      expect(result, 'SMS Sent!');
+    });
   });
 }

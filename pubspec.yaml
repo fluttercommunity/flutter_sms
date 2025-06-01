@@ -6,8 +6,8 @@ repository: https://github.com/fluttercommunity/flutter_sms
 maintainer: Rody Davis (@rodydavis)
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
-  flutter: ^1.10.0
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ^3.10.0
 
 dependencies:
   flutter:

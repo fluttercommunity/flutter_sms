@@ -12,7 +12,7 @@ Supports both direct SMS sending and SMS dialog interface.
                        DESC
   s.homepage         = 'https://github.com/fluttercommunity/flutter_sms'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Flutter Community' => 'flutter-community@example.com' }
+  s.author           = { 'Rody Davis' => 'rody.davis.jr@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
