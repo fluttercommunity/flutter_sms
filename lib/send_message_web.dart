@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-import 'src/flutter_sms_platform.dart';
+import 'src/send_message_platform.dart';
 
 class FlutterSmsPlugin extends FlutterSmsPlatform {
   static void registerWith(Registrar registrar) {

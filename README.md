@@ -6,7 +6,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/fluttercommunity/flutter_sms?color=blue)](https://github.com/fluttercommunity/flutter_sms)
 [![flutter_sms](https://img.shields.io/pub/v/flutter_sms.svg)](https://pub.dev/packages/flutter_sms)
 
-# flutter_sms
+# send_message
 
 ![alt-text-1](https://github.com/fluttercommunity/flutter_sms/blob/master/screenshots/ios_blank.PNG)
 
@@ -32,7 +32,7 @@ This will populate the correct fields.
 Make sure to Install and Import the Package.
 
 ``` dart
-import 'package:flutter_sms/flutter_sms.dart';
+import 'package:send_message/send_message.dart';
 ```
 
 Create a function for sending messages.

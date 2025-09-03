@@ -1,5 +1,5 @@
-name: flutter_sms_example
-description: Demonstrates how to use the flutter_sms plugin.
+name: send_message_example
+description: Demonstrates how to use the send_message plugin.
 publish_to: 'none'
 
 environment:
@@ -10,7 +10,7 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  flutter_sms:
+  send_message:
     path: ../
   flutter_test:
     sdk: flutter
