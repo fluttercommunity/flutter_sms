@@ -6,6 +6,8 @@ import 'package:send_message/send_message.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -43,8 +45,11 @@ class _MyAppState extends State<MyApp> {
 
   Future<bool> _canSendSMS() async {
     bool _result = await canSendSMS();
-    setState(() => _canSendSMSMessage =
-        _result ? 'This unit can send SMS' : 'This unit cannot send SMS');
+    setState(
+      () => _canSendSMSMessage = _result
+          ? 'This unit can send SMS'
+          : 'This unit cannot send SMS',
+    );
     return _result;
   }
 
@@ -52,34 +57,36 @@ class _MyAppState extends State<MyApp> {
     return Padding(
       padding: const EdgeInsets.all(3),
       child: Container(
-          decoration: BoxDecoration(
-              border: Border(
+        decoration: BoxDecoration(
+          border: Border(
             bottom: BorderSide(color: Colors.grey.shade300),
             top: BorderSide(color: Colors.grey.shade300),
             left: BorderSide(color: Colors.grey.shade300),
             right: BorderSide(color: Colors.grey.shade300),
-          )),
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => setState(() => people.remove(name)),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => setState(() => people.remove(name)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(0),
+                child: Text(
+                  name,
+                  textScaleFactor: 1,
+                  style: const TextStyle(fontSize: 12),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Text(
-                    name,
-                    textScaleFactor: 1,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                )
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -88,9 +95,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('SMS/MMS Example'),
-        ),
+        appBar: AppBar(title: const Text('SMS/MMS Example')),
         body: ListView(
           children: <Widget>[
             if (people.isEmpty)
@@ -112,8 +117,9 @@ class _MyAppState extends State<MyApp> {
               leading: const Icon(Icons.people),
               title: TextField(
                 controller: _controllerPeople,
-                decoration:
-                    const InputDecoration(labelText: 'Add Phone Number'),
+                decoration: const InputDecoration(
+                  labelText: 'Add Phone Number',
+                ),
                 keyboardType: TextInputType.number,
                 onChanged: (String value) => setState(() {}),
               ),
@@ -122,9 +128,9 @@ class _MyAppState extends State<MyApp> {
                 onPressed: _controllerPeople.text.isEmpty
                     ? null
                     : () => setState(() {
-                          people.add(_controllerPeople.text.toString());
-                          _controllerPeople.clear();
-                        }),
+                        people.add(_controllerPeople.text.toString());
+                        _controllerPeople.clear();
+                      }),
               ),
             ),
             const Divider(),
@@ -149,23 +155,27 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             SwitchListTile(
-                title: const Text('Send Direct'),
-                subtitle: const Text(
-                    'Should we skip the additional dialog? (Android only)'),
-                value: sendDirect,
-                onChanged: (bool newValue) {
-                  setState(() {
-                    sendDirect = newValue;
-                  });
-                }),
+              title: const Text('Send Direct'),
+              subtitle: const Text(
+                'Should we skip the additional dialog? (Android only)',
+              ),
+              value: sendDirect,
+              onChanged: (bool newValue) {
+                setState(() {
+                  sendDirect = newValue;
+                });
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(8),
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.resolveWith(
-                      (states) => Theme.of(context).colorScheme.secondary),
+                    (states) => Theme.of(context).colorScheme.secondary,
+                  ),
                   padding: WidgetStateProperty.resolveWith(
-                      (states) => const EdgeInsets.symmetric(vertical: 16)),
+                    (states) => const EdgeInsets.symmetric(vertical: 16),
+                  ),
                 ),
                 onPressed: () {
                   _send();
@@ -184,10 +194,7 @@ class _MyAppState extends State<MyApp> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Text(
-                        _message ?? 'No Data',
-                        maxLines: null,
-                      ),
+                      child: Text(_message ?? 'No Data', maxLines: null),
                     ),
                   ),
                 ],
