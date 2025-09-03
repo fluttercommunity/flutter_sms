@@ -295,7 +295,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Navaghan Dabhi** ([@DabhiNavaghan](https://github.com/DabhiNavaghan))
 
-- 🌐 Portfolio: [navaghandahbi.dev](https://navaghandahbi.dev)
+- 🌐 Website: [navaghandahbi.dev](https://navaghandahbi.dev)
 - 🐱 GitHub: [DabhiNavaghan](https://github.com/DabhiNavaghan)
 
 ## 🙏 Acknowledgments
