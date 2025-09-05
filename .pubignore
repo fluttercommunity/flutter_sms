@@ -1,0 +1,37 @@
+# IDE and editor files
+.vscode/
+.idea/
+android/.idea/
+*.iml
+
+# macOS files
+.DS_Store
+
+# Generated Flutter files
+.flutter-plugins-dependencies
+example/.flutter-plugins-dependencies
+
+# Generated platform files
+**/Flutter/GeneratedPluginRegistrant.*
+**/Flutter/Flutter-Debug.xcconfig
+**/Flutter/Flutter-Release.xcconfig
+**/Flutter/Flutter-Profile.xcconfig
+
+# Build and cache files
+**/build/
+**/.gradle/
+
+# Gradle wrapper files
+**/gradlew
+**/gradlew.bat
+**/gradle-wrapper.jar
+
+# Example app IDE files
+example/.vscode/
+example/.idea/
+example/**/.idea/
+
+# Generated example app files  
+example/macos/Flutter/
+example/linux/flutter/generated_plugin_registrant.*
+example/windows/flutter/generated_plugin_registrant.*

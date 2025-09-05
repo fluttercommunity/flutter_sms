@@ -1,5 +1,5 @@
 #import "FlutterSmsPlugin.h"
-#import <flutter_sms/flutter_sms-Swift.h>
+#import <send_message/send_message-Swift.h>
 
 @implementation FlutterSmsPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {

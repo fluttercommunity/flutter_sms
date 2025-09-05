@@ -7,7 +7,7 @@ public class SwiftFlutterSmsPlugin: NSObject, FlutterPlugin, UINavigationControl
     var _arguments = [String: Any]()
 
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flutter_sms", binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(name: "send_message", binaryMessenger: registrar.messenger())
     let instance = SwiftFlutterSmsPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
