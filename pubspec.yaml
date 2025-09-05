@@ -1,6 +1,6 @@
 name: send_message
 description: A Flutter plugin to Send SMS and MMS on iOS and Android. If iMessage is enabled it will send as iMessage on iOS. This plugin must be tested on a real device on iOS.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/DabhiNavaghan
 repository: https://github.com/DabhiNavaghan/send_message
 maintainer: Navaghan Dabhi (@DabhiNavaghan)
