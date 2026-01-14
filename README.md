@@ -12,6 +12,9 @@
 
 Online Demo: https://fluttercommunity.github.io/flutter_sms/
 
+> [!WARNING]
+> This project has moved here: https://github.com/rodydavis/packages.dart
+
 ## Description
 
 Flutter Plugin for sending SMS and MMS on Android and iOS. If you send to more than one person it will send as MMS. On the iOS if the number is an iPhone and iMessage is enabled it will send as an iMessage.
