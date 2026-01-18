@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../flutter_sms.dart';
 import 'user_agent/io.dart' if (dart.library.html) 'user_agent/web.dart';
 
 const MethodChannel _channel = MethodChannel('flutter_sms');
@@ -34,7 +35,7 @@ class FlutterSmsPlatform extends PlatformInterface {
 
   ///
   ///
-  Future<String> sendSMS({
+  Future<SendSMSResult> sendSMS({
     required String message,
     required List<String> recipients,
     bool sendDirect = false,
@@ -43,16 +44,30 @@ class FlutterSmsPlatform extends PlatformInterface {
     mapData['message'] = message;
     if (!kIsWeb && Platform.isIOS) {
       mapData['recipients'] = recipients;
-      return _channel
-          .invokeMethod<String>('sendSMS', mapData)
-          .then((value) => value ?? 'Error sending sms');
+      return _channel.invokeMethod<String>('sendSMS', mapData).then((value) {
+        switch (value) {
+          case 'sent':
+            return SendSMSResult.sent;
+          case 'cancelled':
+            return SendSMSResult.cancelled;
+          case 'failed':
+            return SendSMSResult.failed;
+          default:
+            return SendSMSResult.unknownError;
+        }
+      });
     } else {
       String _phones = recipients.join(';');
       mapData['recipients'] = _phones;
       mapData['sendDirect'] = sendDirect;
-      return _channel
-          .invokeMethod<String>('sendSMS', mapData)
-          .then((value) => value ?? 'Error sending sms');
+      return _channel.invokeMethod<String>('sendSMS', mapData).then((value) {
+        switch (value) {
+          case 'sent':
+            return SendSMSResult.sent;
+          default:
+            return SendSMSResult.unknownError;
+        }
+      });
     }
   }
 

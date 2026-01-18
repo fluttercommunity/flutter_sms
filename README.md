@@ -42,11 +42,12 @@ Create a function for sending messages.
 
 ``` dart
 void _sendSMS(String message, List<String> recipents) async {
- String _result = await sendSMS(message: message, recipients: recipents)
-        .catchError((onError) {
-      print(onError);
-    });
-print(_result);
+  SendSMSResult result = await sendSMS(
+    message: message,
+    recipients: recipents,
+  ).catchError((onError) => print(onError));
+
+  print(result);
 }
 ```
 
@@ -72,11 +73,13 @@ On Android, you can skip the additional dialog with the sendDirect parameter.
 String message = "This is a test message!";
 List<String> recipents = ["1234567890", "5556787676"];
 
- String _result = await sendSMS(message: message, recipients: recipents, sendDirect: true)
-        .catchError((onError) {
-      print(onError);
-    });
-print(_result);
+SendSMSResult result = await sendSMS(
+  message: message,
+  recipients: recipents,
+  sendDirect: true,
+).catchError((onError) => print(onError));
+
+print(result);
 ```
 
 NOTE: This also requires the SEND_SMS permission to be added to the AndroidManifest.xml

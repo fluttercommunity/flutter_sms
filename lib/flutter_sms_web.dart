@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
+import 'flutter_sms.dart';
 import 'src/flutter_sms_platform.dart';
 
 class FlutterSmsPlugin extends FlutterSmsPlatform {
@@ -12,15 +12,15 @@ class FlutterSmsPlugin extends FlutterSmsPlatform {
   }
 
   @override
-  Future<String> sendSMS({
+  Future<SendSMSResult> sendSMS({
     required String message,
     required List<String> recipients,
     bool sendDirect = false,
   }) async {
     bool _messageSent =
         await FlutterSmsPlatform.instance.launchSmsMulti(recipients, message);
-    if (_messageSent) return 'Message Sent!';
-    return 'Error Sending Message!';
+    if (_messageSent) return SendSMSResult.sent;
+    return SendSMSResult.unknownError;
   }
 
   @override
