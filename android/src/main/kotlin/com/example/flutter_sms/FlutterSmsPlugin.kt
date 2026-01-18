@@ -3,7 +3,10 @@ package com.example.flutter_sms
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -21,7 +24,20 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 
-class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
+class FlutterSmsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+  // V1 embedding entry point. This is deprecated and will be removed in a future Flutter
+  // release but we leave it here in case someone's app does not utilize the V2 embedding yet.
+  companion object {
+    private const val SENT_INTENT_ACTION = "SMS_SENT_ACTION"
+
+    @JvmStatic
+    fun registerWith(registrar: Registrar) {
+      val inst = FlutterSmsPlugin()
+      inst.activity = registrar.activity()
+      inst.setupCallbackChannels(registrar.messenger())
+    }
+  }
+
   private lateinit var mChannel: MethodChannel
   private var activity: Activity? = null
   private val REQUEST_CODE_SEND_SMS = 205
@@ -59,59 +75,81 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     mChannel.setMethodCallHandler(null)
   }
 
-  // V1 embedding entry point. This is deprecated and will be removed in a future Flutter
-  // release but we leave it here in case someone's app does not utilize the V2 embedding yet.
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val inst = FlutterSmsPlugin()
-      inst.activity = registrar.activity()
-      inst.setupCallbackChannels(registrar.messenger())
-    }
-  }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
     when (call.method) {
-        "sendSMS" -> {
-          if (!canSendSMS()) {
-            result.error(
-                    "device_not_capable",
-                    "The current device is not capable of sending text messages.",
-                    "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS.")
-            return
-          }
-          val message = call.argument<String?>("message") ?: ""
-          val recipients = call.argument<String?>("recipients") ?: ""
-          val sendDirect = call.argument<Boolean?>("sendDirect") ?: false
-          sendSMS(result, recipients, message!!, sendDirect)
+      "sendSMS" -> {
+        if (!canSendSMS()) {
+          result.error(
+            "device_not_capable",
+            "The current device is not capable of sending text messages.",
+            "A device may be unable to send messages if it does not support messaging or if it is not currently configured to send messages. This only applies to the ability to send text messages via iMessage, SMS, and MMS.",
+          )
+          return
         }
-        "canSendSMS" -> result.success(canSendSMS())
-        else -> result.notImplemented()
+        val message = call.argument<String?>("message") ?: ""
+        val recipients = call.argument<String?>("recipients") ?: ""
+        val sendDirect = call.argument<Boolean?>("sendDirect") ?: false
+
+        if (!sendDirect && !canSendSMSViaApp()) {
+          result.error(
+            "app_to_send_sms_not_available",
+            "The current device has not an app to send sms.",
+            "To send a non direct sms, an sms application is required",
+          )
+          return
+        }
+        sendSMS(result, recipients, message!!, sendDirect)
+      }
+      "canSendSMS" -> result.success(canSendSMS())
+      else -> result.notImplemented()
     }
   }
 
   @TargetApi(Build.VERSION_CODES.ECLAIR)
-  private fun canSendSMS(): Boolean {
-    if (!activity!!.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY))
-      return false
+  private fun canSendSMS(): Boolean =
+    activity!!.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
+
+  @TargetApi(Build.VERSION_CODES.ECLAIR)
+  private fun canSendSMSViaApp(): Boolean {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("smsto:")
-    val activityInfo = intent.resolveActivityInfo(activity!!.packageManager, intent.flags.toInt())
-    return !(activityInfo == null || !activityInfo.exported)
+    val activityInfo =
+      intent.resolveActivityInfo(activity!!.packageManager, intent.flags.toInt())
+    return canSendSMS() && !(activityInfo == null || !activityInfo.exported)
   }
 
   private fun sendSMS(result: Result, phones: String, message: String, sendDirect: Boolean) {
     if (sendDirect) {
       sendSMSDirect(result, phones, message);
-    }
-    else {
+    } else {
       sendSMSDialog(result, phones, message);
     }
   }
 
   private fun sendSMSDirect(result: Result, phones: String, message: String) {
     // SmsManager is android.telephony
-    val sentIntent = PendingIntent.getBroadcast(activity, 0, Intent("SMS_SENT_ACTION"), PendingIntent.FLAG_IMMUTABLE)
+    val sentIntent = PendingIntent.getBroadcast(
+      activity,
+      0,
+      Intent(SENT_INTENT_ACTION),
+      PendingIntent.FLAG_IMMUTABLE
+    )
+
+    activity?.registerReceiver(object : BroadcastReceiver() {
+      override fun onReceive(context: Context, intent: Intent) {
+        activity?.unregisterReceiver(this)
+        when (resultCode) {
+          Activity.RESULT_OK -> result.success("SMS Sent!")
+          else -> result.error(
+            "sent_sms_error",
+            "Error sending the sms",
+            "Error code $resultCode"
+          )
+        }
+      }
+    }, IntentFilter(SENT_INTENT_ACTION))
+
     val mSmsManager = SmsManager.getDefault()
     val numbers = phones.split(";")
 
@@ -124,8 +162,6 @@ class FlutterSmsPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         mSmsManager.sendTextMessage(num, null, message, sentIntent, null)
       }
     }
-
-    result.success("SMS Sent!")
   }
 
   private fun sendSMSDialog(result: Result, phones: String, message: String) {
