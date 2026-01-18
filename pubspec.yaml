@@ -1,21 +1,21 @@
 name: flutter_sms
 description: A Flutter plugin to Send SMS and MMS on iOS and Android. If iMessage is enabled it will send as iMessage on iOS. This plugin must be tested on a real device on iOS.
-version: 2.3.3
+version: 2.4.0
 homepage: https://github.com/rodydavis/plugins
 repository: https://github.com/fluttercommunity/flutter_sms
 maintainer: Rody Davis (@rodydavis)
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ^1.10.0
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ^3.10.0
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  plugin_platform_interface: ^2.0.0
-  url_launcher: ^6.0.3
+  plugin_platform_interface: ^2.1.8
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
